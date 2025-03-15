@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your first html page</title>
+    <style>
+        div p{
+            color: #5d44c1;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        div p:first-of-type{
+            color: #6ec11a;
+        }
+
+        div p:last-of-type{
+            color: red;
+        }
+        div p:nth-of-type(3n){
+            color: yellow;
+        }
+        div p:nth-of-type(2n) {
+            color: pink;
+        }
+        div p:hover{
+            cursor: pointer;
+            color: gray;
+        }
+        div p{
+            /* color: aqua!important; */
+            color: aqua;
+        }
+        div p#special{
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello world...</h1>
+    <div>
+        <p id="special">Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic id velit enim odit esse corporis, ad ex autem distinctio dolore fuga officia facere ab nobis nostrum consectetur iste itaque libero!</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic id velit enim odit esse corporis, ad ex autem distinctio dolore fuga officia facere ab nobis nostrum consectetur iste itaque libero!</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic id velit enim odit esse corporis, ad ex autem distinctio dolore fuga officia facere ab nobis nostrum consectetur iste itaque libero!</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic id velit enim odit esse corporis, ad ex autem distinctio dolore fuga officia facere ab nobis nostrum consectetur iste itaque libero!</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic id velit enim odit esse corporis, ad ex autem distinctio dolore fuga officia facere ab nobis nostrum consectetur iste itaque libero!</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic id velit enim odit esse corporis, ad ex autem distinctio dolore fuga officia facere ab nobis nostrum consectetur iste itaque libero!</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic id velit enim odit esse corporis, ad ex autem distinctio dolore fuga officia facere ab nobis nostrum consectetur iste itaque libero!</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic id velit enim odit esse corporis, ad ex autem distinctio dolore fuga officia facere ab nobis nostrum consectetur iste itaque libero!</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic id velit enim odit esse corporis, ad ex autem distinctio dolore fuga officia facere ab nobis nostrum consectetur iste itaque libero!</p>
+    </div>
+</body>
+</html>

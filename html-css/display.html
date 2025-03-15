@@ -1,0 +1,49 @@
+<!DOCTYPE html> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container{
+            width: 800px;
+            height: 800px;
+            background-color: chocolate;
+            position: relative;
+            padding: 30px;
+            border: 0;
+            overflow: hidden;
+        }
+        div.children{
+            margin: 4px;
+            background-color: white;
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            z-index: 1;
+            position: absolute;
+        }
+        /* #container div:first-of-type{
+            margin-right: 24px;
+        } */
+        #container div:nth-of-type(2){
+            position: absolute;
+            background-color: gray;
+            left: 0;
+            top: 0;
+            z-index: 0;
+            /* top: 0; */
+            /* left: 0; */
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div class="children">1</div>
+        <div class="children">2</div>
+        <div class="children">3</div>
+        <div class="children">4</div>
+    </div>
+</body>
+</html>

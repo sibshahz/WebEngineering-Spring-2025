@@ -1,0 +1,25 @@
+body{
+    background-color: black;
+}
+h1{
+    color: white;
+    font-size: 42px;
+    font-family: sans-serif;
+}
+
+#parent{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3,3fr);
+    grid: repeat(3, 80px) / auto-flow;
+}
+
+.children{
+    /* column-span: 1fr;
+    width:100px;
+    height: 100px; */
+    column-span: 2fr;
+    margin: 8px;
+    display: inline-block;
+    background-color: white;
+}
