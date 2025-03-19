@@ -1,10 +1,9 @@
 import Navigation from "./navigation";
 import Logo from "./logo";
-import "./header.css"
 
 function Header(){
     return(
-        <header>
+        <header className="flex flex-row items-center justify-between">
             <Logo logoSize={42} text={"News"} />
             <Navigation />
         </header>

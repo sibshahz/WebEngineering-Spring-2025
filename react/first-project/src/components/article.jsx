@@ -28,7 +28,9 @@ function Article(){
                 newsList.map((newsItem) => {
                     return(
                     <div key={newsItem.id}>
-                    <h1>{newsItem.title}</h1>
+                    <h1
+                    className="my-5"
+                    >{newsItem.title}</h1>
                     <p>{newsItem.content}</p>
                     <h5>Author: {newsItem.author}</h5>
                     <h6>Date: {newsItem.date}</h6>
