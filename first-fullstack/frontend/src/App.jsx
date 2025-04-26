@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import AddProductForm from "./components/add-product";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -7,7 +8,8 @@ function App() {
     const url = "http://localhost:8000/products";
     const response = await fetch(url);
     const json = await response.json();
-    setProducts(json);
+    console.log("PRODUCTS FROM SERVER", json);
+    setProducts(json.products);
   }
   useEffect(() => {
     getData();
@@ -15,6 +17,7 @@ function App() {
   return (
     <>
       <h1>Welcome to our store.</h1>
+      <AddProductForm />
       {products.map((item, index) => {
         return (
           <div key={index}>

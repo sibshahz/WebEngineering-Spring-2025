@@ -25,7 +25,7 @@ app.get("/products", async (req, res) => {
   try {
     const products = await Product.find({}).exec();
     res.status(200).send({
-      myproducts: products,
+      products: products,
     });
   } catch (error) {
     console.error(error);
@@ -44,7 +44,7 @@ app.get("/products/:id", async (req, res) => {
       });
     }
     res.status(200).send({
-      foundproduct: product,
+      product: product,
     });
   } catch (error) {
     console.error(error.message);
@@ -77,7 +77,7 @@ app.put("/products/:id", async (req, res) => {
       { name: newName, price: newPrice },
       { new: true }
     );
-    res.status(201).send({ productUpdated: updatedProduct });
+    res.status(201).send({ product: updatedProduct });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Internal server error" });
