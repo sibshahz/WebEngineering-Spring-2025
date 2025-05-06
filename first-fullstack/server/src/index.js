@@ -1,12 +1,27 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+const saltRounds = 10;
+// const myPlaintextPassword = "s0//P4$$w0rD";
+// const someOtherPlaintextPassword = "not_bacon";
+// var jwt = require("jsonwebtoken");
+// var token = jwt.sign({ foo: "bar" }, "shhhhh");
 
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
 });
 
+const userSchema = new mongoose.Schema({
+  email: { type: String, required: true },
+  role: { type: String, required: true },
+  password: { type: String, required: true },
+  // products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+});
+
+const User = mongoose.model("User", userSchema);
 const Product = mongoose.model("Product", productSchema);
 
 const app = express();
@@ -19,6 +34,66 @@ const PORT = 8000;
 
 app.get("/", (req, res) => {
   res.send({ message: "Your server is up and running" });
+});
+
+app.post("/signup", async (req, res) => {
+  try {
+    const email = req.body.email;
+    const role = req.body.role;
+    const password = req.body.password;
+
+    const existingUser = await User.find({ email }).exec();
+    if (existingUser.length > 0) {
+      return res.status(400).send({
+        message: "User already exists",
+      });
+    }
+
+    bcrypt.genSalt(saltRounds, async function (err, salt) {
+      bcrypt.hash(password, salt, async function (err, hash) {
+        const newUser = new User({ email, role, password: hash });
+        await newUser.save();
+        res.status(201).send({
+          user: newUser,
+        });
+      });
+    });
+
+    // const token = jwt.sign({ email, role }, "123456789");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Failed to create user" });
+  }
+});
+
+app.post("/signin", async (req, res) => {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const user = await User.findOne({ email }).exec();
+    if (!user) {
+      return res.status(400).send({
+        message: "User not found",
+      });
+    }
+    const hashedPassword = user.password;
+    const role = user.role;
+    const isMatch = await bcrypt.compare(password, hashedPassword);
+    if (!isMatch) {
+      return res.status(400).send({
+        message: "Invalid password",
+      });
+    }
+    // const token = jwt.sign({ email, role }, "123456789");
+    res.status(200).send({
+      message: "User signed in successfully",
+      // token: token,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Failed to sign in" });
+  }
 });
 
 app.get("/products", async (req, res) => {
