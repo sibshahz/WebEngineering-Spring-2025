@@ -6,7 +6,13 @@ function App() {
   const [products, setProducts] = useState([]);
   async function getData() {
     const url = "http://localhost:8000/products";
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
     const json = await response.json();
     console.log("PRODUCTS FROM SERVER", json);
     setProducts(json.products);
@@ -16,6 +22,7 @@ function App() {
   }, []);
   return (
     <>
+      <h1>Dashboard</h1>
       <h1>Welcome to our store.</h1>
       <AddProductForm />
       {products.map((item, index) => {

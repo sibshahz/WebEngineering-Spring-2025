@@ -3,6 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import cookieParser from "cookie-parser";
 const saltRounds = 10;
 // const myPlaintextPassword = "s0//P4$$w0rD";
 // const someOtherPlaintextPassword = "not_bacon";
@@ -25,8 +26,8 @@ const User = mongoose.model("User", userSchema);
 const Product = mongoose.model("Product", productSchema);
 
 const app = express();
-app.use(cors("*"));
-
+app.use(cookieParser());
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 // middleware to parse JSON bodies
 app.use(express.json());
 
@@ -39,7 +40,7 @@ app.get("/", (req, res) => {
 app.post("/signup", async (req, res) => {
   try {
     const email = req.body.email;
-    const role = req.body.role;
+    const role = req.body.role || "admin";
     const password = req.body.password;
 
     const existingUser = await User.find({ email }).exec();
@@ -53,6 +54,9 @@ app.post("/signup", async (req, res) => {
       bcrypt.hash(password, salt, async function (err, hash) {
         const newUser = new User({ email, role, password: hash });
         await newUser.save();
+        // req.session.user = email;
+        const token = jwt.sign({ email: email, role: "admin" }, "secretkey");
+        res.cookie("token", token, { httpOnly: true, secure: true });
         res.status(201).send({
           user: newUser,
         });
@@ -98,6 +102,7 @@ app.post("/signin", async (req, res) => {
 
 app.get("/products", async (req, res) => {
   try {
+    console.log("Token: ", req.cookies.token);
     const products = await Product.find({}).exec();
     res.status(200).send({
       products: products,
