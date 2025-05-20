@@ -33,6 +33,20 @@ app.use(express.json());
 
 const PORT = 8000;
 
+function authenticateToken(req, res, next) {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.sendStatus(401);
+  }
+  jwt.verify(token, "secretkey", (err, user) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
+    req.user = user;
+    next();
+  });
+}
+
 app.get("/", (req, res) => {
   res.send({ message: "Your server is up and running" });
 });
@@ -56,7 +70,12 @@ app.post("/signup", async (req, res) => {
         await newUser.save();
         // req.session.user = email;
         const token = jwt.sign({ email: email, role: "admin" }, "secretkey");
-        res.cookie("token", token, { httpOnly: true, secure: true });
+        res.cookie("token", token, {
+          httpOnly: false,
+          secure: false,
+          expires: new Date(Date.now() + 900000),
+        });
+        // res.cookie("token", token, { httpOnly: true });
         res.status(201).send({
           user: newUser,
         });
@@ -89,7 +108,12 @@ app.post("/signin", async (req, res) => {
         message: "Invalid password",
       });
     }
-    // const token = jwt.sign({ email, role }, "123456789");
+    const token = jwt.sign({ email: email, role: "admin" }, "secretkey");
+    res.cookie("token", token, {
+      httpOnly: false,
+      secure: false,
+      expires: new Date(Date.now() + 900000),
+    });
     res.status(200).send({
       message: "User signed in successfully",
       // token: token,
@@ -100,9 +124,15 @@ app.post("/signin", async (req, res) => {
   }
 });
 
+app.post("/logout", async (req, res) => {
+  res.clearCookie("token");
+  res.send({
+    message: "User logged out",
+  });
+});
+
 app.get("/products", async (req, res) => {
   try {
-    console.log("Token: ", req.cookies.token);
     const products = await Product.find({}).exec();
     res.status(200).send({
       products: products,
@@ -132,7 +162,7 @@ app.get("/products/:id", async (req, res) => {
   }
 });
 
-app.delete("/products/:id", async (req, res) => {
+app.delete("/products/:id", authenticateToken, async (req, res) => {
   try {
     const id = req.params.id;
     const product = await Product.deleteOne({
@@ -147,7 +177,7 @@ app.delete("/products/:id", async (req, res) => {
   }
 });
 
-app.put("/products/:id", async (req, res) => {
+app.put("/products/:id", authenticateToken, async (req, res) => {
   try {
     const id = req.params.id;
     const newName = req.body.name;
@@ -164,7 +194,7 @@ app.put("/products/:id", async (req, res) => {
   }
 });
 
-app.post("/products", async (req, res) => {
+app.post("/products", authenticateToken, async (req, res) => {
   try {
     const name = req.body.name;
     const price = req.body.price;

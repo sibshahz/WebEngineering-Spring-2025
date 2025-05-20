@@ -10,7 +10,7 @@ import { CookiesProvider } from "react-cookie";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <CookiesProvider defaultSetOptions={{ path: "/" }}>
+    <CookiesProvider>
       <BrowserRouter>
         <Navigation />
         <Routes>

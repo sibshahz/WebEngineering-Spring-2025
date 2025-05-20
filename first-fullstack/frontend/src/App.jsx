@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import "./App.css";
 import AddProductForm from "./components/add-product";
@@ -5,14 +6,13 @@ import { useCookies } from "react-cookie";
 
 function App() {
   const [products, setProducts] = useState([]);
-  const [cookies, setCookie] = useCookies(["token"]);
+  const [cookies, setCookie] = useCookies();
 
   useEffect(() => {
-    console.log(cookies);
-    console.log("TOKEN", cookies);
-    if (!cookies) {
-      // window.location.href = "/signin";
-      console.log("Redirect to signin");
+    console.log("TOKEN", cookies.token);
+    if (!cookies.token) {
+      window.location.href = "/signin";
+      // console.log("Redirect to signin");
     }
   }, []);
 
